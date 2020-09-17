@@ -3,14 +3,12 @@ import { View, Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "../screens/Home";
+import Profile from "../screens/Profile";
 
 function Explore() {
   return <View></View>;
 }
 function Favorite() {
-  return <View></View>;
-}
-function Account() {
   return <View></View>;
 }
 
@@ -28,7 +26,7 @@ function Navigator() {
               icon = focused
                 ? require("../assets/homeBold.png")
                 : require("../assets/home.png");
-            } else if (route.name === "Account") {
+            } else if (route.name === "Profile") {
               icon = focused
                 ? require("../assets/userBold.png")
                 : require("../assets/user.png");
@@ -54,7 +52,7 @@ function Navigator() {
         <Tab.Screen name="Home" component={Home}></Tab.Screen>
         <Tab.Screen name="Explore" component={Explore}></Tab.Screen>
         <Tab.Screen name="Favorite" component={Favorite}></Tab.Screen>
-        <Tab.Screen name="Account" component={Account}></Tab.Screen>
+        <Tab.Screen name="Profile" component={Profile}></Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
   );
