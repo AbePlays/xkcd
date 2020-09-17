@@ -1,11 +1,11 @@
 import React from "react";
 import { View } from "react-native";
-import Login from "./screens/Login";
+import Signup from "./screens/Signup";
 
 export default function App() {
   return (
     <View>
-      <Login />
+      <Signup />
     </View>
   );
 }
