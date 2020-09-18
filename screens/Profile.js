@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -8,11 +8,17 @@ import {
   ScrollView,
 } from "react-native";
 import { signout } from "../firebase/functions";
+import { UserContext } from "../context/UserContext";
 
 function Profile() {
   const handleSubmit = async () => {
     await signout();
   };
+
+  const { user } = useContext(UserContext);
+  console.log("Inside Profile", user);
+
+  const name = user.name.split(" ")[0];
 
   return (
     <ScrollView style={styles.container}>
@@ -22,7 +28,7 @@ function Profile() {
       <View style={styles.imageContainer}>
         <Image source={require("../assets/Myself.jpeg")} style={styles.image} />
       </View>
-      <Text style={styles.greetText}>Hi, Abe</Text>
+      <Text style={styles.greetText}>Hi, {name}</Text>
       <View style={styles.settingContainer}>
         <TouchableOpacity activeOpacity="0.9">
           <View style={styles.changeContainer}>

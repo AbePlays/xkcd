@@ -1,20 +1,24 @@
 import React, { useEffect, useContext } from "react";
 import { firebase } from "../firebase/firebase";
+import { getUserData } from "../firebase/functions";
 import Navigator from "./Navigator";
 import AuthNavigator from "./AuthNavigator";
 import { AuthContext } from "../context/AuthContext";
+import { UserContext } from "../context/UserContext";
 
 function MainNavigator() {
   const { loggedIn, logIn, logOut } = useContext(AuthContext);
+  const { changeUser, emptyUser } = useContext(UserContext);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        console.log("User Present");
+        let userData = await getUserData(user.uid);
+        changeUser(userData);
         logIn();
       } else {
-        console.log("User not present");
         logOut();
+        emptyUser();
       }
     });
   }, []);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Text,
   View,
@@ -7,14 +7,20 @@ import {
   Image,
   YellowBox,
 } from "react-native";
+import { UserContext } from "../context/UserContext";
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
 
 function Home() {
+  const { user } = useContext(UserContext);
+  console.log("Inside Home", user);
+
+  const name = user.name.split(" ")[0];
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Hi Abe,</Text>
+        <Text style={styles.headerTitle}>Hi {name},</Text>
         <Text style={styles.headerSubTitle}>Welcome Back 👋</Text>
       </View>
       <View style={styles.searchContainer}>
