@@ -16,7 +16,15 @@ const login = (email, password) => {
     .catch((e) => console.log(e));
 };
 
+const signout = () => {
+  firebase
+    .auth()
+    .signOut()
+    .catch((e) => console.log(e));
+};
+
 module.exports = {
   signup,
   login,
+  signout,
 };

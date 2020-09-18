@@ -1,8 +1,23 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import React, { useContext } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { signout } from "../firebase/functions";
+import { AuthContext } from "../context/AuthContext";
 
 function Profile() {
+  const { logOut } = useContext(AuthContext);
+
+  const handleSubmit = () => {
+    signout();
+    logOut();
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -50,8 +65,8 @@ function Profile() {
           </View>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.btn}>
-        <Text style={styles.btnText}>Sign up</Text>
+      <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
+        <Text style={styles.btnText}>Sign out</Text>
       </TouchableOpacity>
     </ScrollView>
   );
