@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { signup } from "../firebase/functions";
 import { AuthContext } from "../context/AuthContext";
@@ -17,12 +18,14 @@ function Signup({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { logIn } = useContext(AuthContext);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (password === confirmPassword) {
-      signup(email, password, name);
+      setLoading(true);
+      await signup(email, password, name);
       logIn();
     } else {
       Alert.alert("Password not same");
@@ -68,7 +71,11 @@ function Signup({ navigation }) {
           onChangeText={(val) => setConfirmPassword(val)}
         />
         <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-          <Text style={styles.btnText}>Sign up</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            <Text style={styles.btnText}>Sign up</Text>
+          )}
         </TouchableOpacity>
         <View style={styles.bottomContainer}>
           <Text

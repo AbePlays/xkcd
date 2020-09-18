@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { login } from "../firebase/functions";
 import { AuthContext } from "../context/AuthContext";
@@ -14,11 +15,13 @@ import { AuthContext } from "../context/AuthContext";
 function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { logIn } = useContext(AuthContext);
 
-  const handleSubmit = () => {
-    login(email, password);
+  const handleSubmit = async () => {
+    setLoading(true);
+    await login(email, password);
     logIn();
   };
 
@@ -47,7 +50,11 @@ function Login({ navigation }) {
           onChangeText={(val) => setPassword(val)}
         />
         <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-          <Text style={styles.btnText}>Log in</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            <Text style={styles.btnText}>Log in</Text>
+          )}
         </TouchableOpacity>
         <View style={styles.bottomContainer}>
           <Text
