@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Image,
   Text,
@@ -7,9 +7,24 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
+import { signup } from "../firebase/functions";
 
 function Signup() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSubmit = () => {
+    if (password === confirmPassword) {
+      signup(email, password);
+    } else {
+      Alert.alert("Password not same");
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -21,26 +36,34 @@ function Signup() {
       </View>
       <View style={styles.inputContainer}>
         <TextInput
+          value={name}
           placeholder="Name"
           style={styles.input}
           keyboardType="name-phone-pad"
+          onChangeText={(val) => setName(val)}
         />
         <TextInput
+          value={email}
           placeholder="Email"
           style={styles.input}
           keyboardType="email-address"
+          onChangeText={(val) => setEmail(val)}
         />
         <TextInput
+          value={password}
           placeholder="Password"
           style={styles.input}
           secureTextEntry={true}
+          onChangeText={(val) => setPassword(val)}
         />
         <TextInput
+          value={confirmPassword}
           placeholder="Confirm Password"
           style={styles.input}
           secureTextEntry={true}
+          onChangeText={(val) => setConfirmPassword(val)}
         />
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
           <Text style={styles.btnText}>Sign up</Text>
         </TouchableOpacity>
         <View style={styles.bottomContainer}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Image,
   Text,
@@ -8,8 +8,16 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { login } from "../firebase/functions";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = () => {
+    login(email, password);
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -21,16 +29,20 @@ function Login() {
       </View>
       <View style={styles.inputContainer}>
         <TextInput
+          value={email}
           placeholder="Email"
           style={styles.input}
           keyboardType="email-address"
+          onChangeText={(val) => setEmail(val)}
         />
         <TextInput
+          value={password}
           placeholder="Password"
           style={styles.input}
           secureTextEntry={true}
+          onChangeText={(val) => setPassword(val)}
         />
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
           <Text style={styles.btnText}>Log in</Text>
         </TouchableOpacity>
         <View style={styles.bottomContainer}>
