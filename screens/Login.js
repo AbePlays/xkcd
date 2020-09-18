@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Image,
   Text,
@@ -9,13 +9,17 @@ import {
   ScrollView,
 } from "react-native";
 import { login } from "../firebase/functions";
+import { AuthContext } from "../context/AuthContext";
 
 function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { logIn } = useContext(AuthContext);
+
   const handleSubmit = () => {
     login(email, password);
+    logIn();
   };
 
   return (
