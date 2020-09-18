@@ -27,44 +27,6 @@ function Favorite() {
           <Image source={require("../assets/trash.png")} style={styles.trash} />
         </TouchableOpacity>
       </View>
-      <View style={styles.comicContainer}>
-        <View style={styles.imageContainer}>
-          <Image
-            resizeMode="cover"
-            source={require("../assets/yogurt.png")}
-            style={styles.image}
-          />
-        </View>
-        <View style={styles.comicInfo}>
-          <View style={styles.pill}>
-            <Text style={styles.pillText}>#737</Text>
-          </View>
-          <Text style={styles.pillTitle}>Yogurt</Text>
-          <Text style={styles.pillSubTitle}>Date created : 5/20</Text>
-        </View>
-        <TouchableOpacity style={styles.trashContainer}>
-          <Image source={require("../assets/trash.png")} style={styles.trash} />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.comicContainer}>
-        <View style={styles.imageContainer}>
-          <Image
-            resizeMode="cover"
-            source={require("../assets/yogurt.png")}
-            style={styles.image}
-          />
-        </View>
-        <View style={styles.comicInfo}>
-          <View style={styles.pill}>
-            <Text style={styles.pillText}>#737</Text>
-          </View>
-          <Text style={styles.pillTitle}>Yogurt</Text>
-          <Text style={styles.pillSubTitle}>Date created : 5/20</Text>
-        </View>
-        <TouchableOpacity style={styles.trashContainer}>
-          <Image source={require("../assets/trash.png")} style={styles.trash} />
-        </TouchableOpacity>
-      </View>
     </ScrollView>
   );
 }
