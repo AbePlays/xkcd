@@ -17,11 +17,12 @@ function Login({ navigation }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { logIn } = useContext(AuthContext);
+  const { logIn, addUser } = useContext(AuthContext);
 
   const handleSubmit = async () => {
     setLoading(true);
-    await login(email, password);
+    let res = await login(email, password);
+    addUser(res);
     logIn();
   };
 

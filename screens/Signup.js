@@ -20,12 +20,13 @@ function Signup({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { logIn } = useContext(AuthContext);
+  const { logIn, addUser } = useContext(AuthContext);
 
   const handleSubmit = async () => {
     if (password === confirmPassword) {
       setLoading(true);
-      await signup(email, password, name);
+      let user = await signup(email, password, name);
+      addUser(user);
       logIn();
     } else {
       Alert.alert("Password not same");

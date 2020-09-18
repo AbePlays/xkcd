@@ -7,6 +7,7 @@ const signup = async (email, password, name) => {
       .createUserWithEmailAndPassword(email, password);
     let user = res.user;
     await createUser(user, name);
+    return user;
   } catch (e) {
     console.log(e);
   }
@@ -17,6 +18,7 @@ const login = async (email, password) => {
     let res = await firebase.auth().signInWithEmailAndPassword(email, password);
     let user = res.user;
     console.log(user);
+    return user;
   } catch (e) {
     console.log(e);
   }
@@ -34,6 +36,7 @@ const createUser = async (user, name) => {
   try {
     await firebase.firestore().collection("users").doc(user.uid).set({
       name: name,
+      email: user.email,
       favorites: [],
     });
   } catch (e) {

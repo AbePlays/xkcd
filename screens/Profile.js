@@ -11,10 +11,11 @@ import { signout } from "../firebase/functions";
 import { AuthContext } from "../context/AuthContext";
 
 function Profile() {
-  const { logOut } = useContext(AuthContext);
+  const { logOut, removeUser, getUser } = useContext(AuthContext);
 
   const handleSubmit = async () => {
     await signout();
+    removeUser();
     logOut();
   };
 
