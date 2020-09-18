@@ -22,7 +22,7 @@ function Signup({ navigation }) {
 
   const handleSubmit = () => {
     if (password === confirmPassword) {
-      signup(email, password);
+      signup(email, password, name);
       logIn();
     } else {
       Alert.alert("Password not same");
