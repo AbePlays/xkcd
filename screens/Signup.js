@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { signup } from "../firebase/functions";
 
-function Signup() {
+function Signup({ navigation }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -74,7 +74,7 @@ function Signup() {
           >
             Already have an account?
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text style={styles.bottomText}> Log in</Text>
           </TouchableOpacity>
         </View>
@@ -86,6 +86,7 @@ function Signup() {
 const styles = StyleSheet.create({
   container: {
     marginTop: 30,
+    backgroundColor: "white",
   },
   header: {
     paddingTop: 40,

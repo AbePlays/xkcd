@@ -1,9 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navigator from "./navigator/Navigator";
-import Preview from "./screens/Preview";
-import Signup from "./screens/Signup";
-import Login from "./screens/Login";
+import AuthNavigator from "./navigator/AuthNavigator";
+import { firebase } from "./firebase/firebase";
 
 export default function App() {
-  return <Login />;
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log("User Present");
+        setLoggedIn(true);
+      } else {
+        console.log("User not present");
+      }
+    });
+  }, []);
+
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  return <>{loggedIn ? <Navigator /> : <AuthNavigator />}</>;
 }
