@@ -13,8 +13,8 @@ import { AuthContext } from "../context/AuthContext";
 function Profile() {
   const { logOut } = useContext(AuthContext);
 
-  const handleSubmit = () => {
-    signout();
+  const handleSubmit = async () => {
+    await signout();
     logOut();
   };
 
