@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Image,
   Text,
@@ -11,7 +11,6 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { signup } from "../firebase/functions";
-import { AuthContext } from "../context/AuthContext";
 
 function Signup({ navigation }) {
   const [name, setName] = useState("");
@@ -20,14 +19,10 @@ function Signup({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { logIn, addUser } = useContext(AuthContext);
-
   const handleSubmit = async () => {
     if (password === confirmPassword) {
       setLoading(true);
       let user = await signup(email, password, name);
-      addUser(user);
-      logIn();
     } else {
       Alert.alert("Password not same");
     }

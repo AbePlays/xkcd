@@ -1,5 +1,14 @@
-import React from "react";
-import { Text, View, TextInput, StyleSheet, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  Image,
+  YellowBox,
+} from "react-native";
+
+YellowBox.ignoreWarnings(["Setting a timer"]);
 
 function Home() {
   return (

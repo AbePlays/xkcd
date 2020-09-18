@@ -17,7 +17,6 @@ const login = async (email, password) => {
   try {
     let res = await firebase.auth().signInWithEmailAndPassword(email, password);
     let user = res.user;
-    console.log(user);
     return user;
   } catch (e) {
     console.log(e);
@@ -44,8 +43,29 @@ const createUser = async (user, name) => {
   }
 };
 
+const currentUser = async () => {
+  try {
+    let user = await firebase.auth().currentUser;
+    return user;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const getUserData = async (uid) => {
+  console.log("Inside getUserData");
+  try {
+    let docs = await firebase.firestore().collection("users").doc(uid).get();
+    return docs.data();
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 module.exports = {
   signup,
   login,
   signout,
+  getUserData,
+  currentUser,
 };

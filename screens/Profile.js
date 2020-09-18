@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -8,15 +8,10 @@ import {
   ScrollView,
 } from "react-native";
 import { signout } from "../firebase/functions";
-import { AuthContext } from "../context/AuthContext";
 
 function Profile() {
-  const { logOut, removeUser, getUser } = useContext(AuthContext);
-
   const handleSubmit = async () => {
     await signout();
-    removeUser();
-    logOut();
   };
 
   return (

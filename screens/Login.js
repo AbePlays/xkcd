@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Image,
   Text,
@@ -10,20 +10,15 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { login } from "../firebase/functions";
-import { AuthContext } from "../context/AuthContext";
 
 function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { logIn, addUser } = useContext(AuthContext);
-
   const handleSubmit = async () => {
     setLoading(true);
     let res = await login(email, password);
-    addUser(res);
-    logIn();
   };
 
   return (
