@@ -1,19 +1,57 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 
 function Favorite() {
+  const [loading, setLoading] = useState(true);
+  const [imageUrl, setImageUrl] = useState();
+
+  let max = 2361,
+    min = 1;
+
+  const generateRandomNumber = () => {
+    return Math.floor(Math.random() * (max - min) + min);
+  };
+
+  const fetchImage = async () => {
+    setLoading(true);
+    const num = generateRandomNumber();
+    try {
+      let res = await fetch(`http://xkcd.com/${num}/info.0.json`);
+      let data = await res.json();
+      setImageUrl(data.img);
+      setLoading(false);
+    } catch (e) {
+      console.log("This is an error", e);
+    }
+  };
+
+  useEffect(() => {
+    fetchImage();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Explore</Text>
       </View>
       <View style={styles.imageContainer}>
-        <Image
-          source={require("../assets/yogurt.png")}
-          style={styles.image}
-          resizeMode="cover"
-        />
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <Image
+            source={{ uri: imageUrl }}
+            style={styles.image}
+            resizeMode="cover"
+          />
+        )}
       </View>
       <View style={styles.controlContainer}>
         <TouchableOpacity>
