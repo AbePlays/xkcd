@@ -29,14 +29,15 @@ function Favorite() {
           />
         </View>
         <View style={styles.comicInfo}>
-          <View style={styles.pill}>
-            <Text style={styles.pillText}>#{item.num}</Text>
-          </View>
           <Text style={styles.pillTitle}>{item.title}</Text>
           <Text style={styles.pillSubTitle}>
             Date created : {`${item.month}/${item.year.substring(2)}`}
           </Text>
+          <View style={styles.pill}>
+            <Text style={styles.pillText}>#{item.num}</Text>
+          </View>
         </View>
+
         <TouchableOpacity
           style={styles.trashContainer}
           onPress={() => {
@@ -52,7 +53,7 @@ function Favorite() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Favorite</Text>
+        <Text style={styles.headerText}>Favorites</Text>
       </View>
       <FlatList
         data={favs}
@@ -87,7 +88,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 20,
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 5,
+    width: "85%",
+    alignSelf: "flex-end",
     borderColor: "#eee",
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#eee",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 30,
+    transform: [{ translateX: -40 }],
   },
   image: {
     borderRadius: 5,
@@ -109,19 +112,20 @@ const styles = StyleSheet.create({
     width: 65,
   },
   comicInfo: {
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   pill: {
     backgroundColor: "#D1E9FE",
     width: 60,
     height: 25,
+    marginTop: 5,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
   },
   pillText: {
     fontWeight: "bold",
-    fontSize: 14,
+    fontSize: 12,
   },
   pillTitle: {
     fontWeight: "bold",
@@ -130,11 +134,11 @@ const styles = StyleSheet.create({
   pillSubTitle: {
     fontWeight: "bold",
     fontSize: 14,
-    opacity: 0.5,
+    opacity: 0.3,
   },
   trashContainer: {
     position: "absolute",
-    right: 20,
+    right: 15,
     bottom: 10,
   },
   trash: {
