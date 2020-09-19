@@ -10,7 +10,7 @@ import { FavoriteContext } from "../context/FavoriteContext";
 function MainNavigator() {
   const { loggedIn, logIn, logOut } = useContext(AuthContext);
   const { changeUser, emptyUser } = useContext(UserContext);
-  const { initializeFavs } = useContext(FavoriteContext);
+  const { initializeFavs, emptyFavs } = useContext(FavoriteContext);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(async (user) => {
@@ -22,6 +22,7 @@ function MainNavigator() {
       } else {
         logOut();
         emptyUser();
+        emptyFavs();
       }
     });
   }, []);

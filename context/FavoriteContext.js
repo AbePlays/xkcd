@@ -34,9 +34,19 @@ function FavoriteContextProvider(props) {
     setFavs(arr);
   };
 
+  const emptyFavs = () => {
+    setFavs([]);
+  };
+
   return (
     <FavoriteContext.Provider
-      value={{ addToFirestore, getFavs, initializeFavs, removeFromFirestore }}
+      value={{
+        addToFirestore,
+        getFavs,
+        initializeFavs,
+        removeFromFirestore,
+        emptyFavs,
+      }}
     >
       {props.children}
     </FavoriteContext.Provider>
