@@ -70,7 +70,7 @@ function Favorite() {
           }}
         >
           <Image
-            style={styles.controlIcon}
+            style={[styles.controlIcon, { width: 40, height: 40 }]}
             source={require("../assets/star.png")}
           />
         </TouchableOpacity>
@@ -106,24 +106,35 @@ const styles = StyleSheet.create({
   imageContainer: {
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 5,
     marginVertical: 70,
-    marginHorizontal: 20,
+    marginHorizontal: 30,
+    borderWidth: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    borderRadius: 5,
+    borderColor: "#eee",
+    elevation: 2,
     padding: 10,
   },
   image: {
-    height: 300,
-    width: 350,
+    height: 250,
+    width: 300,
   },
   controlContainer: {
-    width: 120,
+    width: 250,
     alignSelf: "center",
     justifyContent: "space-between",
+    alignItems: "center",
     flexDirection: "row",
   },
   controlIcon: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
   },
 });
 
