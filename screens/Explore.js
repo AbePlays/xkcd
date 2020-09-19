@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
   Text,
@@ -8,24 +8,25 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
+import { FavoriteContext } from "../context/FavoriteContext";
 
 function Favorite() {
+  const [num, setNum] = useState(1);
+  const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState();
+
+  const { addToFirestore } = useContext(FavoriteContext);
 
   let max = 2361,
     min = 1;
 
-  const generateRandomNumber = () => {
-    return Math.floor(Math.random() * (max - min) + min);
-  };
-
   const fetchImage = async () => {
     setLoading(true);
-    const num = generateRandomNumber();
     try {
       let res = await fetch(`http://xkcd.com/${num}/info.0.json`);
       let data = await res.json();
+      setData(data);
       setImageUrl(data.img);
       setLoading(false);
     } catch (e) {
@@ -35,7 +36,7 @@ function Favorite() {
 
   useEffect(() => {
     fetchImage();
-  }, []);
+  }, [num]);
 
   return (
     <ScrollView style={styles.container}>
@@ -54,19 +55,29 @@ function Favorite() {
         )}
       </View>
       <View style={styles.controlContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          disabled={num == min}
+          onPress={() => setNum((prevNum) => prevNum - 1)}
+        >
           <Image
             style={styles.controlIcon}
             source={require("../assets/left.png")}
           />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            addToFirestore(data);
+          }}
+        >
           <Image
             style={styles.controlIcon}
             source={require("../assets/star.png")}
           />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          disabled={num == max}
+          onPress={() => setNum((prevNum) => prevNum + 1)}
+        >
           <Image
             style={styles.controlIcon}
             source={require("../assets/right.png")}

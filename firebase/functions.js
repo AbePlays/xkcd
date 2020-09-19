@@ -62,10 +62,24 @@ const getUserData = async (uid) => {
   }
 };
 
+const addData = async (data) => {
+  try {
+    let { uid } = await currentUser();
+    let user = await firebase.firestore().collection("users").doc(uid);
+    let doc = await user.get();
+    await user.update({
+      favorites: [...doc.data().favorites, data],
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 module.exports = {
   signup,
   login,
   signout,
   getUserData,
   currentUser,
+  addData,
 };
