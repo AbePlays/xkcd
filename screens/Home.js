@@ -6,16 +6,39 @@ import {
   StyleSheet,
   Image,
   YellowBox,
+  ActivityIndicator,
 } from "react-native";
 import { UserContext } from "../context/UserContext";
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
 
 function Home() {
-  const { user } = useContext(UserContext);
-  console.log("Inside Home", user);
+  const [loading, setLoading] = useState(true);
+  const [comicNumber, setComicNumber] = useState();
+  const [comicTitle, setComicTitle] = useState();
+  const [comicDate, setComicDate] = useState();
+  const [imageUrl, setImageUrl] = useState();
 
+  const { user } = useContext(UserContext);
   const name = user.name.split(" ")[0];
+
+  const fetchData = async () => {
+    try {
+      let res = await fetch(`http://xkcd.com/info.0.json`);
+      let data = await res.json();
+      setComicNumber(data.num);
+      setComicTitle(data.title);
+      setComicDate(data.month + "/" + data.year.substring(2));
+      setImageUrl(data.img);
+      setLoading(false);
+    } catch (e) {
+      console.log("This is an error", e);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -33,20 +56,28 @@ function Home() {
       </View>
       <Text style={styles.topic}>Latest Comic</Text>
       <View style={styles.comicContainer}>
-        <View style={styles.imageContainer}>
-          <Image
-            resizeMode="cover"
-            source={require("../assets/yogurt.png")}
-            style={styles.image}
-          />
-        </View>
-        <View style={styles.comicInfo}>
-          <View style={styles.pill}>
-            <Text style={styles.pillText}>#737</Text>
-          </View>
-          <Text style={styles.pillTitle}>Yogurt</Text>
-          <Text style={styles.pillSubTitle}>Date created : 5/20</Text>
-        </View>
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <>
+            <View style={styles.imageContainer}>
+              <Image
+                resizeMode="cover"
+                source={{ uri: imageUrl }}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.comicInfo}>
+              <View style={styles.pill}>
+                <Text style={styles.pillText}>#{comicNumber}</Text>
+              </View>
+              <Text style={styles.pillTitle}>{comicTitle}</Text>
+              <Text style={styles.pillSubTitle}>
+                {`Date created : ${comicDate}`}
+              </Text>
+            </View>
+          </>
+        )}
       </View>
     </View>
   );
