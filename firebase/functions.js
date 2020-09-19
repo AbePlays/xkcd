@@ -75,6 +75,43 @@ const addData = async (data) => {
   }
 };
 
+const getFavsData = async () => {
+  try {
+    let { uid } = await currentUser();
+    let docs = await firebase.firestore().collection("users").doc(uid).get();
+    let arr = [];
+    docs.data().favorites.forEach((fav) => {
+      let obj = {
+        num: fav.num,
+        img: fav.img,
+        title: fav.title,
+        month: fav.month,
+        year: fav.year,
+      };
+      arr.push(obj);
+    });
+
+    return arr;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const removeData = async (num) => {
+  try {
+    let { uid } = await currentUser();
+    let user = await firebase.firestore().collection("users").doc(uid);
+    let doc = await user.get();
+    let arr = doc.data().favorites;
+    arr = arr.filter((item) => item.num !== num);
+    await user.update({
+      favorites: arr,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 module.exports = {
   signup,
   login,
@@ -82,4 +119,6 @@ module.exports = {
   getUserData,
   currentUser,
   addData,
+  getFavsData,
+  removeData,
 };

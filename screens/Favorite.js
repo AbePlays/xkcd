@@ -1,33 +1,66 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
+import { FavoriteContext } from "../context/FavoriteContext";
 
 function Favorite() {
-  return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Favorite</Text>
-      </View>
+  const [favs, setFavs] = useState([]);
+  const { getFavs, removeFromFirestore } = useContext(FavoriteContext);
+
+  useEffect(() => {
+    setFavs(getFavs());
+  });
+
+  const renderItem = ({ item }) => {
+    return (
       <View style={styles.comicContainer}>
         <View style={styles.imageContainer}>
           <Image
             resizeMode="cover"
-            source={require("../assets/yogurt.png")}
+            source={{ uri: item.img }}
             style={styles.image}
           />
         </View>
         <View style={styles.comicInfo}>
           <View style={styles.pill}>
-            <Text style={styles.pillText}>#737</Text>
+            <Text style={styles.pillText}>#{item.num}</Text>
           </View>
-          <Text style={styles.pillTitle}>Yogurt</Text>
-          <Text style={styles.pillSubTitle}>Date created : 5/20</Text>
+          <Text style={styles.pillTitle}>{item.title}</Text>
+          <Text style={styles.pillSubTitle}>
+            Date created : {`${item.month}/${item.year.substring(2)}`}
+          </Text>
         </View>
-        <TouchableOpacity style={styles.trashContainer}>
+        <TouchableOpacity
+          style={styles.trashContainer}
+          onPress={() => {
+            removeFromFirestore(item.num);
+          }}
+        >
           <Image source={require("../assets/trash.png")} style={styles.trash} />
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Favorite</Text>
+      </View>
+      <FlatList
+        data={favs}
+        renderItem={renderItem}
+        keyExtractor={(item) => `${item.num}`}
+        style={styles.list}
+      />
+    </View>
   );
 }
 
@@ -41,10 +74,14 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 40,
     paddingHorizontal: 30,
+    marginBottom: 20,
   },
   headerText: {
     fontSize: 30,
     fontWeight: "bold",
+  },
+  list: {
+    marginBottom: 60,
   },
   comicContainer: {
     marginTop: 20,
