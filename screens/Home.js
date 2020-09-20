@@ -9,6 +9,7 @@ import {
   YellowBox,
   ActivityIndicator,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { UserContext } from "../context/UserContext";
 import ImageViewer from "react-native-image-zoom-viewer";
@@ -21,9 +22,26 @@ function Home() {
   const [comicTitle, setComicTitle] = useState();
   const [imageUrl, setImageUrl] = useState();
   const [showModal, setShowModal] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [arr, setArr] = useState([]);
 
   const { user } = useContext(UserContext);
   const name = user.name.split(" ")[0];
+
+  const submitHandler = async () => {
+    if (searchText <= comicNumber) {
+      try {
+        let res = await fetch(`http://xkcd.com/${searchText}/info.0.json`);
+        let data = await res.json();
+        console.log(data);
+        setArr([{ url: data.img }]);
+        setShowModal(true);
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -32,6 +50,7 @@ function Home() {
       setComicNumber(data.num);
       setComicTitle(data.title);
       setImageUrl(data.img);
+      setArr([{ url: data.img }]);
       setLoading(false);
     } catch (e) {
       console.log("This is an error", e);
@@ -49,12 +68,12 @@ function Home() {
           animationType="slide"
           visible={true}
           transparent={true}
-          onRequestClose={() => setShowModal((prev) => !prev)}
+          onRequestClose={() => {
+            setShowModal((prev) => !prev);
+            setArr([{ url: imageUrl }]);
+          }}
         >
-          <ImageViewer
-            renderIndicator={() => {}}
-            imageUrls={[{ url: imageUrl }]}
-          />
+          <ImageViewer renderIndicator={() => {}} imageUrls={arr} />
         </Modal>
       ) : (
         <>
@@ -63,11 +82,22 @@ function Home() {
             <Text style={styles.headerSubTitle}>Welcome Back 👋</Text>
           </View>
           <View style={styles.searchContainer}>
-            <TextInput placeholder="🔍     Search comic" style={styles.input} />
-            <Text>
-              Each xkcd comic comes with an ID tag alonside it. Enter ID of the
-              comic to search OR tap the favorites button in the tab bar to view
-              your favorite xkcd comics.
+            <Image
+              source={require("../assets/magnifying-glass.png")}
+              style={styles.glassImage}
+            />
+            <TextInput
+              placeholder="Search comic"
+              style={styles.input}
+              value={searchText}
+              onChangeText={(val) => setSearchText(val)}
+              keyboardType="number-pad"
+              maxLength={4}
+              onEndEditing={submitHandler}
+              returnKeyType="search"
+            />
+            <Text style={{ textAlign: "justify" }}>
+              {`Example: 69, 420 etc.\n\nEach xkcd comic comes with an ID tag alonside it. Enter ID of the comic to search OR tap the favorites button in the tab bar to view your favorite xkcd comics.`}
             </Text>
           </View>
           <View style={styles.mainContainer}>
@@ -136,15 +166,26 @@ const styles = StyleSheet.create({
     marginTop: 40,
     borderRadius: 10,
     paddingHorizontal: 20,
-    paddingBottom: 40,
+    paddingBottom: 5,
     paddingTop: 20,
     backgroundColor: "#D1E9FE",
     marginHorizontal: 20,
+    position: "relative",
+  },
+  glassImage: {
+    width: 15,
+    height: 15,
+    position: "absolute",
+    left: 30,
+    opacity: 0.5,
+    top: 27,
+    zIndex: 1,
   },
   input: {
     borderRadius: 7,
+    height: 30,
     backgroundColor: "white",
-    paddingLeft: 15,
+    paddingLeft: 40,
     marginBottom: 20,
   },
   topic: {
@@ -159,7 +200,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   bottomContainer: {
-    marginTop: 30,
+    marginTop: 20,
     flex: 1,
     borderWidth: 1,
     shadowColor: "#000",
