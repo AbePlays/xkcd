@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
+  Modal,
   View,
   Text,
   StyleSheet,
@@ -9,11 +10,13 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { FavoriteContext } from "../context/FavoriteContext";
+import ImageViewer from "react-native-image-zoom-viewer";
 
 function Favorite() {
   const [num, setNum] = useState(1);
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
+  const [showMoal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState();
 
   const { addToFirestore } = useContext(FavoriteContext);
@@ -43,47 +46,64 @@ function Favorite() {
       <View style={styles.header}>
         <Text style={styles.headerText}>Explore</Text>
       </View>
-      <View style={styles.imageContainer}>
-        {loading ? (
-          <ActivityIndicator />
-        ) : (
-          <Image
-            source={{ uri: imageUrl }}
-            style={styles.image}
-            resizeMode="cover"
-          />
-        )}
-      </View>
-      <View style={styles.controlContainer}>
-        <TouchableOpacity
-          disabled={num == min}
-          onPress={() => setNum((prevNum) => prevNum - 1)}
+      {showMoal ? (
+        <Modal
+          visible={true}
+          transparent={true}
+          onRequestClose={() => setShowModal((prev) => !prev)}
         >
-          <Image
-            style={styles.controlIcon}
-            source={require("../assets/left.png")}
+          <ImageViewer
+            renderIndicator={() => {}}
+            imageUrls={[{ url: imageUrl }]}
           />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            addToFirestore(data);
-          }}
-        >
-          <Image
-            style={[styles.controlIcon, { width: 40, height: 40 }]}
-            source={require("../assets/star.png")}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          disabled={num == max}
-          onPress={() => setNum((prevNum) => prevNum + 1)}
-        >
-          <Image
-            style={styles.controlIcon}
-            source={require("../assets/right.png")}
-          />
-        </TouchableOpacity>
-      </View>
+        </Modal>
+      ) : (
+        <>
+          <TouchableOpacity onPress={() => setShowModal((prev) => !prev)}>
+            <View style={styles.imageContainer}>
+              {loading ? (
+                <ActivityIndicator />
+              ) : (
+                <Image
+                  source={{ uri: imageUrl }}
+                  style={styles.image}
+                  resizeMode="cover"
+                />
+              )}
+            </View>
+          </TouchableOpacity>
+          <View style={styles.controlContainer}>
+            <TouchableOpacity
+              disabled={num == min}
+              onPress={() => setNum((prevNum) => prevNum - 1)}
+            >
+              <Image
+                style={styles.controlIcon}
+                source={require("../assets/left.png")}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                addToFirestore(data);
+              }}
+            >
+              <Image
+                style={[styles.controlIcon, { width: 40, height: 40 }]}
+                source={require("../assets/star.png")}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              disabled={num == max}
+              onPress={() => setNum((prevNum) => prevNum + 1)}
+            >
+              <Image
+                style={styles.controlIcon}
+                source={require("../assets/right.png")}
+              />
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 }
