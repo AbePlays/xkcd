@@ -13,20 +13,31 @@ import { FavoriteContext } from "../context/FavoriteContext";
 import ImageViewer from "react-native-image-zoom-viewer";
 
 function Favorite() {
+  const [favs, setFavs] = useState([]);
   const [num, setNum] = useState(1);
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [showMoal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState();
+  const [isFav, setIsFav] = useState(false);
 
-  const { addToFirestore } = useContext(FavoriteContext);
+  const { addToFirestore, removeFromFirestore, getFavs } = useContext(
+    FavoriteContext
+  );
 
   let max = 2361,
     min = 1;
 
   const fetchImage = async () => {
+    setIsFav(false);
     setLoading(true);
     try {
+      for (let i = 0; i < favs.length; i++) {
+        if (favs[i].num === num) {
+          setIsFav(true);
+          break;
+        }
+      }
       let res = await fetch(`http://xkcd.com/${num}/info.0.json`);
       let data = await res.json();
       setData(data);
@@ -38,6 +49,7 @@ function Favorite() {
   };
 
   useEffect(() => {
+    setFavs(getFavs());
     fetchImage();
   }, [num]);
 
@@ -84,12 +96,22 @@ function Favorite() {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                addToFirestore(data);
+                if (isFav) {
+                  setIsFav(false);
+                  removeFromFirestore(num);
+                } else {
+                  setIsFav(true);
+                  addToFirestore(data);
+                }
               }}
             >
               <Image
                 style={[styles.controlIcon, { width: 40, height: 40 }]}
-                source={require("../assets/star.png")}
+                source={
+                  isFav
+                    ? require("../assets/starBold.png")
+                    : require("../assets/star.png")
+                }
               />
             </TouchableOpacity>
             <TouchableOpacity
