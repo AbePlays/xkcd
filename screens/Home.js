@@ -16,7 +16,7 @@ import ImageViewer from "react-native-image-zoom-viewer";
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
 
-function Home() {
+function Home({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [comicNumber, setComicNumber] = useState();
   const [comicTitle, setComicTitle] = useState();
@@ -128,7 +128,10 @@ function Home() {
                 </View>
               )}
             </TouchableOpacity>
-            <TouchableOpacity style={styles.bottomContainer}>
+            <TouchableOpacity
+              style={styles.bottomContainer}
+              onPress={() => navigation.navigate("Explore")}
+            >
               <View style={styles.exploreView}>
                 <Image
                   source={require("../assets/right-arrow-button.png")}
