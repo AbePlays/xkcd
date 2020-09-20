@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
+  Modal,
   ScrollView,
   View,
   Text,
@@ -9,9 +10,12 @@ import {
   FlatList,
 } from "react-native";
 import { FavoriteContext } from "../context/FavoriteContext";
+import ImageViewer from "react-native-image-zoom-viewer";
 
 function Favorite() {
   const [favs, setFavs] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [imageUrl, setImageUrl] = useState();
   const { getFavs, removeFromFirestore } = useContext(FavoriteContext);
 
   useEffect(() => {
@@ -20,33 +24,60 @@ function Favorite() {
 
   const renderItem = ({ item }) => {
     return (
-      <View style={styles.comicContainer}>
-        <View style={styles.imageContainer}>
-          <Image
-            resizeMode="cover"
-            source={{ uri: item.img }}
-            style={styles.image}
-          />
-        </View>
-        <View style={styles.comicInfo}>
-          <Text style={styles.pillTitle}>{item.title}</Text>
-          <Text style={styles.pillSubTitle}>
-            Date created : {`${item.month}/${item.year.substring(2)}`}
-          </Text>
-          <View style={styles.pill}>
-            <Text style={styles.pillText}>#{item.num}</Text>
-          </View>
-        </View>
+      <TouchableOpacity
+        style={styles.comicContainer}
+        onPress={() => {
+          setImageUrl(item.img);
+          setShowModal((prev) => !prev);
+        }}
+      >
+        {showModal ? (
+          <Modal
+            visible={true}
+            transparent={true}
+            onRequestClose={() => {
+              setShowModal((prev) => !prev);
+              setImageUrl();
+            }}
+          >
+            <ImageViewer
+              renderIndicator={() => {}}
+              imageUrls={[{ url: imageUrl }]}
+            />
+          </Modal>
+        ) : (
+          <>
+            <View style={styles.imageContainer}>
+              <Image
+                resizeMode="cover"
+                source={{ uri: item.img }}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.comicInfo}>
+              <Text style={styles.pillTitle}>{item.title}</Text>
+              <Text style={styles.pillSubTitle}>
+                Date created : {`${item.month}/${item.year.substring(2)}`}
+              </Text>
+              <View style={styles.pill}>
+                <Text style={styles.pillText}>#{item.num}</Text>
+              </View>
+            </View>
 
-        <TouchableOpacity
-          style={styles.trashContainer}
-          onPress={() => {
-            removeFromFirestore(item.num);
-          }}
-        >
-          <Image source={require("../assets/trash.png")} style={styles.trash} />
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity
+              style={styles.trashContainer}
+              onPress={() => {
+                removeFromFirestore(item.num);
+              }}
+            >
+              <Image
+                source={require("../assets/trash.png")}
+                style={styles.trash}
+              />
+            </TouchableOpacity>
+          </>
+        )}
+      </TouchableOpacity>
     );
   };
 
