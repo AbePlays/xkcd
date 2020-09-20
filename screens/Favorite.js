@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
   },
   comicInfo: {
     justifyContent: "center",
+    maxWidth: "85%",
   },
   pill: {
     backgroundColor: "#D1E9FE",
