@@ -62,7 +62,7 @@ function Favorite() {
           <TouchableOpacity onPress={() => setShowModal((prev) => !prev)}>
             <View style={styles.imageContainer}>
               {loading ? (
-                <ActivityIndicator />
+                <ActivityIndicator color="#D1E9FE" />
               ) : (
                 <Image
                   source={{ uri: imageUrl }}

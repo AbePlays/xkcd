@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
+  Modal,
   Text,
   View,
   TextInput,
@@ -10,6 +11,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { UserContext } from "../context/UserContext";
+import ImageViewer from "react-native-image-zoom-viewer";
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
 
@@ -17,8 +19,8 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [comicNumber, setComicNumber] = useState();
   const [comicTitle, setComicTitle] = useState();
-  const [comicDate, setComicDate] = useState();
   const [imageUrl, setImageUrl] = useState();
+  const [showModal, setShowModal] = useState(false);
 
   const { user } = useContext(UserContext);
   const name = user.name.split(" ")[0];
@@ -29,7 +31,6 @@ function Home() {
       let data = await res.json();
       setComicNumber(data.num);
       setComicTitle(data.title);
-      setComicDate(data.month + "/" + data.year.substring(2));
       setImageUrl(data.img);
       setLoading(false);
     } catch (e) {
@@ -43,45 +44,72 @@ function Home() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Hi {name},</Text>
-        <Text style={styles.headerSubTitle}>Welcome Back 👋</Text>
-      </View>
-      <View style={styles.searchContainer}>
-        <TextInput placeholder="🔍     Search comic" style={styles.input} />
-        <Text>
-          Each xkcd comic comes with an ID tag alonside it. Enter ID of the
-          comic to search OR tap the favorites button in the tab bar to view
-          your favorite xkcd comics.
-        </Text>
-      </View>
-      <View style={styles.mainContainer}>
-        <View style={styles.bottomContainer}>
-          <Text style={styles.topic}>Latest Comic</Text>
-          <View style={styles.imageContainer}>
-            <Image
-              resizeMode="cover"
-              source={{ uri: imageUrl }}
-              style={styles.image}
-            />
+      {showModal ? (
+        <Modal
+          animationType="slide"
+          visible={true}
+          transparent={true}
+          onRequestClose={() => setShowModal((prev) => !prev)}
+        >
+          <ImageViewer
+            renderIndicator={() => {}}
+            imageUrls={[{ url: imageUrl }]}
+          />
+        </Modal>
+      ) : (
+        <>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Hi {name},</Text>
+            <Text style={styles.headerSubTitle}>Welcome Back 👋</Text>
           </View>
-          <View style={styles.comicInfo}>
-            <View style={styles.pill}>
-              <Text style={styles.pillText}>#{comicNumber}</Text>
-            </View>
-            <Text style={styles.pillTitle}>{comicTitle}</Text>
+          <View style={styles.searchContainer}>
+            <TextInput placeholder="🔍     Search comic" style={styles.input} />
+            <Text>
+              Each xkcd comic comes with an ID tag alonside it. Enter ID of the
+              comic to search OR tap the favorites button in the tab bar to view
+              your favorite xkcd comics.
+            </Text>
           </View>
-        </View>
-        <TouchableOpacity style={styles.bottomContainer}>
-          <View style={styles.exploreView}>
-            <Image
-              source={require("../assets/right-arrow-button.png")}
-              style={styles.exploreImage}
-            />
-            <Text style={styles.exploreText}>Explore</Text>
+          <View style={styles.mainContainer}>
+            <TouchableOpacity
+              style={styles.bottomContainer}
+              onPress={() => setShowModal((prev) => !prev)}
+            >
+              <Text style={styles.topic}>Latest Comic</Text>
+              {loading ? (
+                <View style={styles.activityContainer}>
+                  <ActivityIndicator size="large" color="#D1E9FE" />
+                </View>
+              ) : (
+                <View>
+                  <View style={styles.imageContainer}>
+                    <Image
+                      resizeMode="cover"
+                      source={{ uri: imageUrl }}
+                      style={styles.image}
+                    />
+                  </View>
+                  <View style={styles.comicInfo}>
+                    <View style={styles.pill}>
+                      <Text style={styles.pillText}>#{comicNumber}</Text>
+                    </View>
+                    <Text style={styles.pillTitle}>{comicTitle}</Text>
+                  </View>
+                </View>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.bottomContainer}>
+              <View style={styles.exploreView}>
+                <Image
+                  source={require("../assets/right-arrow-button.png")}
+                  style={styles.exploreImage}
+                />
+                <Text style={styles.exploreText}>Explore</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-      </View>
+        </>
+      )}
     </View>
   );
 }
@@ -146,6 +174,11 @@ const styles = StyleSheet.create({
     height: 270,
     elevation: 2,
     marginHorizontal: 5,
+  },
+  activityContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   imageContainer: {
     marginVertical: 15,
