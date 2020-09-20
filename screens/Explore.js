@@ -32,8 +32,10 @@ function Favorite() {
     setIsFav(false);
     setLoading(true);
     try {
+      console.log("Fav length is = ", favs.length);
       for (let i = 0; i < favs.length; i++) {
         if (favs[i].num === num) {
+          console.log(i + " is true");
           setIsFav(true);
           break;
         }

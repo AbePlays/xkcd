@@ -17,6 +17,7 @@ function FavoriteContextProvider(props) {
     };
     console.log(obj);
     setFavs((prevFavs) => [...prevFavs, obj]);
+    setFavs((prevFavs) => prevFavs.sort(compare));
     addData(data);
   };
 
@@ -29,8 +30,22 @@ function FavoriteContextProvider(props) {
     return favs;
   };
 
+  const compare = (a, b) => {
+    const numA = a.num;
+    const numB = b.num;
+
+    if (numB < numA) {
+      return 1;
+    } else if (numB > numA) {
+      return -1;
+    } else {
+      return 0;
+    }
+  };
+
   const initializeFavs = async () => {
     let arr = await getFavsData();
+    arr.sort(compare);
     setFavs(arr);
   };
 
