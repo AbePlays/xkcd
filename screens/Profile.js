@@ -16,8 +16,6 @@ function Profile() {
   };
 
   const { user } = useContext(UserContext);
-  console.log("Inside Profile", user);
-
   const name = user.name.split(" ")[0];
 
   return (
@@ -26,7 +24,10 @@ function Profile() {
         <Text style={styles.headerText}>Profile</Text>
       </View>
       <View style={styles.imageContainer}>
-        <Image source={require("../assets/Myself.jpeg")} style={styles.image} />
+        <Image
+          source={require("../assets/placeholder.png")}
+          style={styles.image}
+        />
       </View>
       <Text style={styles.greetText}>Hi, {name}</Text>
       <View style={styles.settingContainer}>
@@ -91,7 +92,14 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     marginTop: 40,
+    alignSelf: "center",
+    borderColor: "#eee",
+    justifyContent: "center",
     alignItems: "center",
+    height: 156,
+    width: 156,
+    borderRadius: 78,
+    borderWidth: 10,
   },
   image: {
     borderRadius: 75,

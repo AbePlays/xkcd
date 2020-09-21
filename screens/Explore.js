@@ -29,16 +29,20 @@ function Explore() {
   let max = 2361,
     min = 1;
 
-  const fetchImage = async () => {
+  const checkFav = () => {
     setIsFav(false);
-    setLoading(true);
-    try {
-      for (let i = 0; i < favos.length; i++) {
-        if (favos[i].num === num) {
-          setIsFav(true);
-          break;
-        }
+    for (let i = 0; i < favos.length; i++) {
+      if (favos[i].num === num) {
+        setIsFav(true);
+        break;
       }
+    }
+  };
+
+  const fetchImage = async () => {
+    setLoading(true);
+    checkFav();
+    try {
       let res = await fetch(`http://xkcd.com/${num}/info.0.json`);
       let data = await res.json();
       setData(data);
@@ -51,7 +55,11 @@ function Explore() {
 
   useEffect(() => {
     fetchImage();
-  }, [num, favos]);
+  }, [num]);
+
+  useEffect(() => {
+    checkFav();
+  }, [favos]);
 
   return (
     <View style={styles.container}>
@@ -86,11 +94,11 @@ function Explore() {
           </TouchableOpacity>
           <View style={styles.controlContainer}>
             <TouchableOpacity
-              disabled={num == min}
+              disabled={num === min}
               onPress={() => setNum((prevNum) => prevNum - 1)}
             >
               <Image
-                style={styles.controlIcon}
+                style={[styles.controlIcon, { opacity: num === min ? 0.2 : 1 }]}
                 source={require("../assets/left.png")}
               />
             </TouchableOpacity>
@@ -115,11 +123,11 @@ function Explore() {
               />
             </TouchableOpacity>
             <TouchableOpacity
-              disabled={num == max}
+              disabled={num === max}
               onPress={() => setNum((prevNum) => prevNum + 1)}
             >
               <Image
-                style={styles.controlIcon}
+                style={[styles.controlIcon, { opacity: num === max ? 0.2 : 1 }]}
                 source={require("../assets/right.png")}
               />
             </TouchableOpacity>
