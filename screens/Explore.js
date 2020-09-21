@@ -6,14 +6,13 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  ScrollView,
   ActivityIndicator,
 } from "react-native";
 import { FavoriteContext } from "../context/FavoriteContext";
 import ImageViewer from "react-native-image-zoom-viewer";
 
-function Favorite() {
-  const [favs, setFavs] = useState([]);
+function Explore() {
+  let favos = [];
   const [num, setNum] = useState(1);
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
@@ -21,9 +20,11 @@ function Favorite() {
   const [imageUrl, setImageUrl] = useState();
   const [isFav, setIsFav] = useState(false);
 
-  const { addToFirestore, removeFromFirestore, getFavs } = useContext(
+  const { addToFirestore, removeFromFirestore, favs } = useContext(
     FavoriteContext
   );
+
+  favos = favs;
 
   let max = 2361,
     min = 1;
@@ -32,10 +33,8 @@ function Favorite() {
     setIsFav(false);
     setLoading(true);
     try {
-      console.log("Fav length is = ", favs.length);
-      for (let i = 0; i < favs.length; i++) {
-        if (favs[i].num === num) {
-          console.log(i + " is true");
+      for (let i = 0; i < favos.length; i++) {
+        if (favos[i].num === num) {
           setIsFav(true);
           break;
         }
@@ -46,17 +45,16 @@ function Favorite() {
       setImageUrl(data.img);
       setLoading(false);
     } catch (e) {
-      console.log("This is an error", e);
+      console.log(e);
     }
   };
 
   useEffect(() => {
-    setFavs(getFavs());
     fetchImage();
-  }, [num]);
+  }, [num, favos]);
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Explore</Text>
       </View>
@@ -128,7 +126,7 @@ function Favorite() {
           </View>
         </>
       )}
-    </ScrollView>
+    </View>
   );
 }
 
@@ -182,4 +180,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Favorite;
+export default Explore;

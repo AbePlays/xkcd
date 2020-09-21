@@ -6,7 +6,7 @@ export const FavoriteContext = createContext();
 function FavoriteContextProvider(props) {
   const [favs, setFavs] = useState([]);
 
-  const addToFirestore = (data) => {
+  const addToFirestore = async (data) => {
     const { num, img, title, month, year } = data;
     const obj = {
       num,
@@ -18,16 +18,12 @@ function FavoriteContextProvider(props) {
     console.log(obj);
     setFavs((prevFavs) => [...prevFavs, obj]);
     setFavs((prevFavs) => prevFavs.sort(compare));
-    addData(data);
+    await addData(data);
   };
 
   const removeFromFirestore = async (num) => {
     setFavs((prevFavs) => prevFavs.filter((fav) => fav.num !== num));
     await removeData(num);
-  };
-
-  const getFavs = () => {
-    return favs;
   };
 
   const compare = (a, b) => {
@@ -57,10 +53,10 @@ function FavoriteContextProvider(props) {
     <FavoriteContext.Provider
       value={{
         addToFirestore,
-        getFavs,
         initializeFavs,
         removeFromFirestore,
         emptyFavs,
+        favs,
       }}
     >
       {props.children}

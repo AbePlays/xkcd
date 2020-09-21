@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Image,
   Text,
@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
   ActivityIndicator,
 } from "react-native";
 import { login } from "../firebase/functions";
@@ -19,6 +20,10 @@ function Login({ navigation }) {
   const handleSubmit = async () => {
     setLoading(true);
     let res = await login(email, password);
+    if (!res) {
+      Alert.alert("Login Unsuccessfull", "Please enter a valid email-password");
+    }
+    setLoading(false);
   };
 
   return (
@@ -47,7 +52,7 @@ function Login({ navigation }) {
         />
         <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
           {loading ? (
-            <ActivityIndicator size="small" color="white" />
+            <ActivityIndicator size="small" color="#D1E9FE" />
           ) : (
             <Text style={styles.btnText}>Log in</Text>
           )}

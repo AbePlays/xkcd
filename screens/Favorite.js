@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   Modal,
-  ScrollView,
   View,
   Text,
   StyleSheet,
@@ -13,14 +12,13 @@ import { FavoriteContext } from "../context/FavoriteContext";
 import ImageViewer from "react-native-image-zoom-viewer";
 
 function Favorite() {
-  const [favs, setFavs] = useState([]);
+  let favos = [];
+
   const [showModal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState();
-  const { getFavs, removeFromFirestore } = useContext(FavoriteContext);
+  const { removeFromFirestore, favs } = useContext(FavoriteContext);
 
-  useEffect(() => {
-    setFavs(getFavs());
-  });
+  favos = favs;
 
   const renderItem = ({ item }) => {
     return (
@@ -87,7 +85,7 @@ function Favorite() {
         <Text style={styles.headerText}>Favorites</Text>
       </View>
       <FlatList
-        data={favs}
+        data={favos}
         renderItem={renderItem}
         keyExtractor={(item) => `${item.num}`}
         style={styles.list}

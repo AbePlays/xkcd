@@ -23,8 +23,18 @@ function Signup({ navigation }) {
     if (password === confirmPassword) {
       setLoading(true);
       let user = await signup(email, password, name);
+      if (!user) {
+        Alert.alert(
+          "Signup Unsuccessfull",
+          "Please enter a valid email-password"
+        );
+      }
+      setLoading(false);
     } else {
-      Alert.alert("Password not same");
+      Alert.alert(
+        "Signup Unsuccessfull",
+        "Password fields have different values"
+      );
     }
   };
 
@@ -68,7 +78,7 @@ function Signup({ navigation }) {
         />
         <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
           {loading ? (
-            <ActivityIndicator size="small" color="white" />
+            <ActivityIndicator size="small" color="#D1E9FE" />
           ) : (
             <Text style={styles.btnText}>Sign up</Text>
           )}
@@ -142,6 +152,7 @@ const styles = StyleSheet.create({
   bottomText: {
     fontWeight: "bold",
     color: "#FB5B5B",
+    marginBottom: 20,
   },
 });
 

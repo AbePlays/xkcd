@@ -33,14 +33,15 @@ function Home({ navigation }) {
       try {
         let res = await fetch(`http://xkcd.com/${searchText}/info.0.json`);
         let data = await res.json();
-        console.log(data);
         setArr([{ url: data.img }]);
         setShowModal(true);
       } catch (e) {
         console.log(e);
       }
     } else {
+      Alert.alert("Error", `Comic number ${searchText} does not exist`);
     }
+    setSearchText("");
   };
 
   const fetchData = async () => {
@@ -53,7 +54,7 @@ function Home({ navigation }) {
       setArr([{ url: data.img }]);
       setLoading(false);
     } catch (e) {
-      console.log("This is an error", e);
+      console.log(e);
     }
   };
 
