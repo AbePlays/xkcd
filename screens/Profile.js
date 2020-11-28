@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { signout } from "../firebase/functions";
 import { connect } from "react-redux";
+import { signout } from "../firebase/functions";
 
 const Profile = (props) => {
   const handleSubmit = () => {

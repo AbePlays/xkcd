@@ -22,8 +22,7 @@ const Explore = (props) => {
   const [isFav, setIsFav] = useState(false);
 
   let favos = props.favs;
-
-  let max = 2361,
+  let max = 2391,
     min = 1;
 
   const checkFav = () => {
@@ -103,11 +102,9 @@ const Explore = (props) => {
               onPress={() => {
                 if (isFav) {
                   setIsFav(false);
-                  // removeFromFirestore(num);
                   props.remove(num);
                 } else {
                   setIsFav(true);
-                  // addToFirestore(data);
                   props.add(data);
                 }
               }}

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
+import { connect } from "react-redux";
 import { firebase } from "../firebase/firebase";
 import { getUserData } from "../firebase/functions";
 import Navigator from "./Navigator";
 import AuthNavigator from "./AuthNavigator";
-import { ActivityIndicator, View } from "react-native";
-import { connect } from "react-redux";
 import LogIn from "../store/actions/LogIn";
 import LogOut from "../store/actions/LogOut";
 import InitFavs from "../store/actions/InitFavs";
