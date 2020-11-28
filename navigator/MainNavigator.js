@@ -50,7 +50,7 @@ const MainNavigator = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    loggedIn: state.isLoggedIn,
+    loggedIn: state.auth.isLoggedIn,
   };
 };
 
