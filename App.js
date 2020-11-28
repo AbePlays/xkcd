@@ -1,5 +1,4 @@
 import React from "react";
-import UserContextProvider from "./context/UserContext";
 import FavoriteContextProvider from "./context/FavoriteContext";
 import MainNavigator from "./navigator/MainNavigator";
 import { createStore } from "redux";
@@ -11,11 +10,9 @@ const store = createStore(reducer);
 export default function App() {
   return (
     <Provider store={store}>
-      <UserContextProvider>
-        <FavoriteContextProvider>
-          <MainNavigator />
-        </FavoriteContextProvider>
-      </UserContextProvider>
+      <FavoriteContextProvider>
+        <MainNavigator />
+      </FavoriteContextProvider>
     </Provider>
   );
 }

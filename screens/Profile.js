@@ -8,15 +8,14 @@ import {
   ScrollView,
 } from "react-native";
 import { signout } from "../firebase/functions";
-import { UserContext } from "../context/UserContext";
+import { connect } from "react-redux";
 
-function Profile() {
+const Profile = (props) => {
   const handleSubmit = () => {
     signout();
   };
 
-  const { user } = useContext(UserContext);
-  const name = user.name.split(" ")[0];
+  const name = props.name.split(" ")[0];
 
   return (
     <ScrollView style={styles.container}>
@@ -73,7 +72,7 @@ function Profile() {
       </TouchableOpacity>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -151,4 +150,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+const mapStateToProps = (state) => {
+  return {
+    name: state.user.name,
+  };
+};
+
+export default connect(mapStateToProps)(Profile);

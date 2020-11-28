@@ -3,7 +3,7 @@ import { firebase } from "../firebase/firebase";
 import { getUserData } from "../firebase/functions";
 import Navigator from "./Navigator";
 import AuthNavigator from "./AuthNavigator";
-import { UserContext } from "../context/UserContext";
+// import { UserContext } from "../context/UserContext";
 import { FavoriteContext } from "../context/FavoriteContext";
 import { ActivityIndicator, View } from "react-native";
 import { connect } from "react-redux";
@@ -12,19 +12,19 @@ import LogOut from "../store/actions/LogOut";
 
 const MainNavigator = (props) => {
   const [loading, setLoading] = useState(true);
-  const { changeUser, emptyUser } = useContext(UserContext);
+  // const { changeUser, emptyUser } = useContext(UserContext);
   const { initializeFavs, emptyFavs } = useContext(FavoriteContext);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         let userData = await getUserData(user.uid);
-        changeUser(userData);
+        // changeUser(userData);
         initializeFavs();
-        props.logIn();
+        props.logIn(userData);
       } else {
         props.logOut();
-        emptyUser();
+        // emptyUser();
         emptyFavs();
       }
       setLoading(false);
@@ -56,8 +56,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logIn: () => {
-      dispatch(LogIn());
+    logIn: (userData) => {
+      dispatch(LogIn(userData));
     },
     logOut: () => {
       dispatch(LogOut());

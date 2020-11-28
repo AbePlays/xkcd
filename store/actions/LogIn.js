@@ -1,9 +1,10 @@
 import * as actionType from "./ActionTypes";
 
-const LogIn = () => {
+const LogIn = (userData) => {
   console.log("[LogIn]");
   return {
     type: actionType.LOG_IN,
+    payload: userData,
   };
 };
 

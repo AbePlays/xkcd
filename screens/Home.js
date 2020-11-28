@@ -6,17 +6,14 @@ import {
   TextInput,
   StyleSheet,
   Image,
-  YellowBox,
   ActivityIndicator,
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { UserContext } from "../context/UserContext";
 import ImageViewer from "react-native-image-zoom-viewer";
+import { connect } from "react-redux";
 
-YellowBox.ignoreWarnings(["Setting a timer"]);
-
-function Home({ navigation }) {
+const Home = (props, { navigation }) => {
   const [loading, setLoading] = useState(true);
   const [comicNumber, setComicNumber] = useState();
   const [comicTitle, setComicTitle] = useState();
@@ -25,8 +22,7 @@ function Home({ navigation }) {
   const [searchText, setSearchText] = useState("");
   const [arr, setArr] = useState([]);
 
-  const { user } = useContext(UserContext);
-  const name = user.name.split(" ")[0];
+  const name = props.name.split(" ")[0];
 
   const submitHandler = async () => {
     if (searchText <= comicNumber) {
@@ -146,7 +142,7 @@ function Home({ navigation }) {
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -273,4 +269,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    name: state.user.name,
+  };
+};
+
+export default connect(mapStateToProps)(Home);
