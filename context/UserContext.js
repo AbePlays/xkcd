@@ -2,7 +2,7 @@ import React, { createContext, useState } from "react";
 
 export const UserContext = createContext();
 
-function UserContextProvider(props) {
+const UserContextProvider = (props) => {
   const [user, setUser] = useState({});
 
   const changeUser = (val) => {
@@ -18,6 +18,6 @@ function UserContextProvider(props) {
       {props.children}
     </UserContext.Provider>
   );
-}
+};
 
 export default UserContextProvider;

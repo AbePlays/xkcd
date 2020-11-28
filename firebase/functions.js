@@ -43,9 +43,9 @@ const createUser = async (user, name) => {
   }
 };
 
-const currentUser = async () => {
+const currentUser = () => {
   try {
-    let user = await firebase.auth().currentUser;
+    let user = firebase.auth().currentUser;
     return user;
   } catch (e) {
     console.log(e);
@@ -64,8 +64,8 @@ const getUserData = async (uid) => {
 
 const addData = async (data) => {
   try {
-    let { uid } = await currentUser();
-    let user = await firebase.firestore().collection("users").doc(uid);
+    let { uid } = currentUser();
+    let user = firebase.firestore().collection("users").doc(uid);
     let doc = await user.get();
     await user.update({
       favorites: [...doc.data().favorites, data],
@@ -77,7 +77,7 @@ const addData = async (data) => {
 
 const getFavsData = async () => {
   try {
-    let { uid } = await currentUser();
+    let { uid } = currentUser();
     let docs = await firebase.firestore().collection("users").doc(uid).get();
     let arr = [];
     docs.data().favorites.forEach((fav) => {
@@ -99,8 +99,8 @@ const getFavsData = async () => {
 
 const removeData = async (num) => {
   try {
-    let { uid } = await currentUser();
-    let user = await firebase.firestore().collection("users").doc(uid);
+    let { uid } = currentUser();
+    let user = firebase.firestore().collection("users").doc(uid);
     let doc = await user.get();
     let arr = doc.data().favorites;
     arr = arr.filter((item) => item.num !== num);

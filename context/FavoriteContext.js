@@ -3,7 +3,7 @@ import { addData, getFavsData, removeData } from "../firebase/functions";
 
 export const FavoriteContext = createContext();
 
-function FavoriteContextProvider(props) {
+const FavoriteContextProvider = (props) => {
   const [favs, setFavs] = useState([]);
 
   const addToFirestore = async (data) => {
@@ -16,14 +16,16 @@ function FavoriteContextProvider(props) {
       year,
     };
     console.log(obj);
-    setFavs((prevFavs) => [...prevFavs, obj]);
-    setFavs((prevFavs) => prevFavs.sort(compare));
-    await addData(data);
+    setFavs((prevFavs) => {
+      const newFavs = [...prevFavs, obj];
+      return newFavs.sort(compare);
+    });
+    addData(data);
   };
 
-  const removeFromFirestore = async (num) => {
+  const removeFromFirestore = (num) => {
     setFavs((prevFavs) => prevFavs.filter((fav) => fav.num !== num));
-    await removeData(num);
+    removeData(num);
   };
 
   const compare = (a, b) => {
@@ -62,6 +64,6 @@ function FavoriteContextProvider(props) {
       {props.children}
     </FavoriteContext.Provider>
   );
-}
+};
 
 export default FavoriteContextProvider;

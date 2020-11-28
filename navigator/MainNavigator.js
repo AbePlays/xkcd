@@ -19,7 +19,7 @@ function MainNavigator() {
       if (user) {
         let userData = await getUserData(user.uid);
         changeUser(userData);
-        await initializeFavs();
+        initializeFavs();
         logIn();
       } else {
         logOut();

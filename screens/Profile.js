@@ -11,8 +11,8 @@ import { signout } from "../firebase/functions";
 import { UserContext } from "../context/UserContext";
 
 function Profile() {
-  const handleSubmit = async () => {
-    await signout();
+  const handleSubmit = () => {
+    signout();
   };
 
   const { user } = useContext(UserContext);
