@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Modal,
   View,
@@ -8,17 +8,14 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { FavoriteContext } from "../context/FavoriteContext";
 import ImageViewer from "react-native-image-zoom-viewer";
+import { connect } from "react-redux";
+import RemoveData from "../store/actions/RemoveData";
 
-function Favorite() {
-  let favos = [];
-
+const Favorite = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState();
-  const { removeFromFirestore, favs } = useContext(FavoriteContext);
-
-  favos = favs;
+  let favos = props.favs;
 
   const renderItem = ({ item }) => {
     return (
@@ -65,7 +62,7 @@ function Favorite() {
             <TouchableOpacity
               style={styles.trashContainer}
               onPress={() => {
-                removeFromFirestore(item.num);
+                props.remove(item.num);
               }}
             >
               <Image
@@ -92,7 +89,7 @@ function Favorite() {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -177,4 +174,18 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Favorite;
+const mapStateToProps = (state) => {
+  return {
+    favs: state.favs.favorites,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    remove: (num) => {
+      dispatch(RemoveData(num));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Favorite);

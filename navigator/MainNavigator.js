@@ -1,27 +1,27 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { firebase } from "../firebase/firebase";
 import { getUserData } from "../firebase/functions";
 import Navigator from "./Navigator";
 import AuthNavigator from "./AuthNavigator";
-import { FavoriteContext } from "../context/FavoriteContext";
 import { ActivityIndicator, View } from "react-native";
 import { connect } from "react-redux";
 import LogIn from "../store/actions/LogIn";
 import LogOut from "../store/actions/LogOut";
+import InitFavs from "../store/actions/InitFavs";
+import EmptyFavs from "../store/actions/EmptyFavs";
 
 const MainNavigator = (props) => {
   const [loading, setLoading] = useState(true);
-  const { initializeFavs, emptyFavs } = useContext(FavoriteContext);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         let userData = await getUserData(user.uid);
-        initializeFavs();
+        props.initFavs();
         props.logIn(userData);
       } else {
         props.logOut();
-        emptyFavs();
+        props.clearFavs();
       }
       setLoading(false);
     });
@@ -57,6 +57,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     logOut: () => {
       dispatch(LogOut());
+    },
+    initFavs: () => {
+      dispatch(InitFavs());
+    },
+    clearFavs: () => {
+      dispatch(EmptyFavs());
     },
   };
 };

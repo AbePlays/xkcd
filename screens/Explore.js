@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   View,
@@ -8,11 +8,12 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { FavoriteContext } from "../context/FavoriteContext";
 import ImageViewer from "react-native-image-zoom-viewer";
+import { connect } from "react-redux";
+import AddData from "../store/actions/AddData";
+import RemoveData from "../store/actions/RemoveData";
 
-function Explore() {
-  let favos = [];
+const Explore = (props) => {
   const [num, setNum] = useState(1);
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
@@ -20,11 +21,7 @@ function Explore() {
   const [imageUrl, setImageUrl] = useState();
   const [isFav, setIsFav] = useState(false);
 
-  const { addToFirestore, removeFromFirestore, favs } = useContext(
-    FavoriteContext
-  );
-
-  favos = favs;
+  let favos = props.favs;
 
   let max = 2361,
     min = 1;
@@ -106,10 +103,12 @@ function Explore() {
               onPress={() => {
                 if (isFav) {
                   setIsFav(false);
-                  removeFromFirestore(num);
+                  // removeFromFirestore(num);
+                  props.remove(num);
                 } else {
                   setIsFav(true);
-                  addToFirestore(data);
+                  // addToFirestore(data);
+                  props.add(data);
                 }
               }}
             >
@@ -136,7 +135,7 @@ function Explore() {
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -188,4 +187,21 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Explore;
+const mapStateToProps = (state) => {
+  return {
+    favs: state.favs.favorites,
+  };
+};
+
+const mapDispatchToProps = (disptach) => {
+  return {
+    add: (data) => {
+      disptach(AddData(data));
+    },
+    remove: (num) => {
+      disptach(RemoveData(num));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Explore);
